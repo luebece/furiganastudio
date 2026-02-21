@@ -1,0 +1,37 @@
+{
+  "name": "project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "electron-main.js",
+  "scripts": {
+    "start": "node server.js",
+    "desktop": "electron .",
+    "build:exe": "electron-builder --win portable",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.furiganastudio.app",
+    "productName": "FuriganaStudio",
+    "files": [
+      "*.js",
+      "*.html",
+      "*.css",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ],
+      "artifactName": "FuriganaStudio.${ext}"
+    }
+  }
+}

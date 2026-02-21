@@ -1,0 +1,22 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "Nanoka - Modeluse.moc3",
+		"Textures": [
+			"Nanoka - Modeluse.4096/texture_00.png",
+			"Nanoka - Modeluse.4096/texture_01.png"
+		]
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		}
+	]
+}

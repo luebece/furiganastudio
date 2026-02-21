@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>일본어 후리가나 변환기</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+JP:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hero card reveal">
+      <p class="hero-eyebrow">Furigana Studio Local</p>
+      <h1>일본어 후리가나 + 로컬 VOICEVOX 플레이어</h1>
+      <p class="sub">브라우저에서 바로 읽기 루비를 만들고, 캐릭터 음성으로 빠르게 듣는 개인 학습 도구</p>
+      <div class="hero-pills">
+        <span class="pill">Local Voice Engine</span>
+        <span class="pill">Sentence Smart Playback</span>
+        <span class="pill">Meaning Hover Mode</span>
+      </div>
+    </header>
+
+    <div id="appGrid" class="app-grid">
+      <section class="card tool-card reveal">
+        <div class="section-head">
+          <h2>입력</h2>
+        </div>
+        <label for="inputText">일본어 문장</label>
+        <textarea id="inputText" placeholder="예) 明日は東京駅で友達と映画を見る。カタカナはそのまま。"></textarea>
+        <div class="quick-link-row">
+          <button id="novelQuickLinksBtn" type="button" class="ghost icon-btn" aria-label="소설 사이트 빠른 이동" title="소설 사이트 빠른 이동">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3z"></path>
+              <path d="M5 5h6v2H7v10h10v-4h2v6H5V5z"></path>
+            </svg>
+          </button>
+          <span class="quick-link-hint">소설 사이트 빠른 이동</span>
+        </div>
+
+        <div class="voice-config">
+          <div class="voice-speaker-wrap">
+            <div class="field-head">
+              <label for="speakerSelect">캐릭터</label>
+              <button
+                id="reloadVoicesBtn"
+                type="button"
+                class="ghost icon-btn"
+                aria-label="캐릭터 새로고침"
+                title="캐릭터 새로고침"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M19.1 8.6A8 8 0 1 0 20 12h-2a6 6 0 1 1-1.8-4.3L14 10h8V2l-2.9 2.9z" />
+                </svg>
+              </button>
+            </div>
+            <select id="speakerSelect">
+              <option value="">캐릭터 불러오는 중...</option>
+            </select>
+          </div>
+          <div class="play-mode-wrap">
+            <label for="playModeSelect">전체 재생 방식</label>
+            <select id="playModeSelect">
+              <option value="sentence">문장별 재생 (권장)</option>
+              <option value="continuous">한 번에 연속 재생</option>
+            </select>
+          </div>
+          <div id="speakerPreview" class="speaker-preview" aria-live="polite">
+            <img id="speakerFace" alt="선택한 캐릭터 얼굴" />
+            <div class="speaker-meta">
+              <strong id="speakerName">캐릭터 선택 대기 중</strong>
+              <p id="speakerDesc">캐릭터를 고르면 얼굴과 간단한 설명이 표시됩니다.</p>
+            </div>
+          </div>
+          <div class="live2d-wrap">
+            <div class="live2d-controls">
+              <label for="live2dModelSelect">모델</label>
+              <select id="live2dModelSelect">
+                <option value="">모델 불러오는 중...</option>
+              </select>
+              <label for="live2dExpressionSelect">표정</label>
+              <select id="live2dExpressionSelect">
+                <option value="">기본 표정</option>
+              </select>
+              <label for="live2dMotionSelect">동작</label>
+              <select id="live2dMotionSelect">
+                <option value="">기본 대기</option>
+              </select>
+              <button id="playLive2dMotionBtn" type="button" class="ghost">동작 실행</button>
+              <button id="autoActingBtn" type="button" class="ghost auto-acting-btn">자동 연기 ON</button>
+              <button id="uploadLive2dBtn" type="button" class="ghost">모델 폴더 추가</button>
+              <input id="live2dUploadInput" type="file" webkitdirectory directory multiple hidden />
+              <button id="uploadLive2dZipBtn" type="button" class="ghost">ZIP 추가</button>
+              <input id="live2dZipUploadInput" type="file" accept=".zip,application/zip" hidden />
+            </div>
+            <div class="live2d-stage-shell">
+              <div id="live2dStage" class="live2d-stage" aria-label="Live2D 캐릭터"></div>
+              <div id="live2dSpeechBubble" class="live2d-speech-bubble" hidden aria-live="polite"></div>
+            </div>
+            <p id="live2dStatus" class="live2d-status">Live2D 로딩 준비 중...</p>
+            <p id="affectionStatus" class="live2d-status">호감도 0 · 반응 보통</p>
+          </div>
+          <div class="speed-wrap">
+            <label for="speedRange">재생 속도 <span id="speedValue">1.00x</span></label>
+            <input id="speedRange" type="range" min="0.7" max="1.3" step="0.05" value="1.0" />
+          </div>
+          <div class="tone-wrap">
+            <div class="profile-tools">
+              <label for="characterProfileSelect">설정집 선택</label>
+              <select id="characterProfileSelect">
+                <option value="">기본(설정 없음)</option>
+              </select>
+              <button id="characterProfileUploadBtn" type="button" class="ghost">설정집 불러오기</button>
+              <button id="characterProfileClearBtn" type="button" class="ghost">설정집 해제</button>
+              <button id="characterProfileGuideBtn" type="button" class="ghost">설정집 설명</button>
+              <input id="characterProfileInput" type="file" accept=".json,application/json" hidden />
+            </div>
+            <p id="characterProfileStatus" class="profile-status">설정집: 기본(설정 없음)</p>
+            <label for="tonePresetSelect">음성 톤 프리셋</label>
+            <select id="tonePresetSelect">
+              <option value="normal">기본</option>
+              <option value="custom">커스텀</option>
+              <option value="soft">부드럽게</option>
+              <option value="bright">밝게</option>
+              <option value="energetic">활기차게</option>
+              <option value="low">낮고 차분하게</option>
+            </select>
+            <label for="tonePitchRange">피치 <span id="tonePitchValue">0.00</span></label>
+            <input id="tonePitchRange" type="range" min="-0.15" max="0.15" step="0.01" value="0" />
+            <label for="toneIntonationRange">억양 <span id="toneIntonationValue">1.00</span></label>
+            <input id="toneIntonationRange" type="range" min="0.6" max="1.6" step="0.05" value="1.0" />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="convertBtn" type="button">후리가나 생성</button>
+          <button id="toggleMeaningBtn" type="button" class="ghost">뜻 모드 OFF</button>
+          <button id="clearBtn" type="button" class="ghost">지우기</button>
+        </div>
+
+        <div id="prepProgress" class="prep-progress">
+          <div id="prepBar" class="prep-bar"></div>
+          <span id="prepLabel">음성 준비 대기</span>
+        </div>
+
+        <p id="voiceStatus" class="status">VOICEVOX 연결 확인 중...</p>
+        <p id="status" class="status">사전을 불러오는 중입니다...</p>
+      </section>
+
+      <div
+        id="gridResizer"
+        class="grid-resizer reveal"
+        role="separator"
+        aria-label="결과 창 너비 조절"
+        aria-orientation="vertical"
+      ></div>
+
+      <section class="card reveal result-card">
+        <div class="result-head">
+          <h2>결과 / 재생</h2>
+          <div class="result-actions">
+            <div class="text-size-controls" aria-label="결과 글자 크기 조절">
+              <button id="fontDecreaseBtn" type="button" class="ghost">A-</button>
+              <span id="fontSizeValue">100%</span>
+              <button id="fontResetBtn" type="button" class="ghost">기본</button>
+              <button id="fontIncreaseBtn" type="button" class="ghost">A+</button>
+            </div>
+            <div id="wordbookAnchor" class="wordbook-anchor" hidden>
+              <button id="toggleWordbookBtn" type="button" class="ghost">단어장 열기</button>
+              <section id="wordbookPanel" class="wordbook-panel" hidden>
+                <div class="wordbook-head">
+                  <h3>단어장</h3>
+                  <span id="wordbookCount">0개</span>
+                </div>
+                <div id="wordbookGrid" class="wordbook-grid"></div>
+              </section>
+            </div>
+            <button id="playAllBtn" type="button">전체 재생</button>
+            <button id="downloadAllBtn" type="button" class="ghost">전체 다운로드</button>
+            <div class="quiz-launch">
+              <button id="startQuizBtn" type="button" class="ghost">퀴즈 시작</button>
+              <div id="quizDifficultyMenu" class="quiz-difficulty-menu" hidden>
+                <button type="button" class="ghost quiz-difficulty-btn" data-quiz-difficulty="easy">쉬움</button>
+                <button type="button" class="ghost quiz-difficulty-btn" data-quiz-difficulty="normal">보통</button>
+                <button type="button" class="ghost quiz-difficulty-btn" data-quiz-difficulty="hard">어려움</button>
+              </div>
+            </div>
+            <div class="result-nav">
+              <button id="scrollResultTopBtn" type="button" class="ghost">위로</button>
+              <button id="scrollResultBottomBtn" type="button" class="ghost">아래로</button>
+            </div>
+          </div>
+        </div>
+        <div id="output" class="output" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <section class="card small reveal">
+      <h2>정확도 안내</h2>
+      <p>
+        이 사이트는 <code>kuromoji.js</code>(형태소 분석기 + 사전)로 읽기를 계산합니다.
+        일반 문장에서는 매우 정확하지만, 고유명사/신조어/문맥 의존 발음은 예외가 있을 수 있습니다.
+      </p>
+    </section>
+  </main>
+
+  <div id="novelQuickLinksModal" class="guide-modal" hidden>
+    <div class="guide-backdrop" data-novel-links-close="true"></div>
+    <section class="guide-panel quick-links-panel" role="dialog" aria-modal="true" aria-labelledby="novelQuickLinksTitle">
+      <div class="guide-head">
+        <h3 id="novelQuickLinksTitle">빠른 소설 사이트 이동</h3>
+        <button id="novelQuickLinksCloseBtn" type="button" class="ghost">닫기</button>
+      </div>
+      <p class="guide-note">아래 버튼을 누르면 새 탭으로 열린다.</p>
+      <div class="quick-links-grid">
+        <section class="quick-link-group">
+          <a class="quick-link-card" href="https://syosetu.com/" target="_blank" rel="noopener noreferrer">小説家になろう (소설가가 되자)</a>
+          <div class="quick-link-children">
+            <a class="quick-link-card child" href="https://ncode.syosetu.com/n2267be/" target="_blank" rel="noopener noreferrer">ㄴ Re:ゼロから始める異世界生活 (리제로)</a>
+            <a class="quick-link-card child" href="https://syosetu.com/syuppan/view/bookid/249/" target="_blank" rel="noopener noreferrer">ㄴ この素晴らしい世界に祝福を！ (코노스바 · 나로우 출판안내)</a>
+            <a class="quick-link-card child" href="https://ncode.syosetu.com/n9669bk/" target="_blank" rel="noopener noreferrer">ㄴ 無職転生 〜異世界行ったら本気だす〜</a>
+            <a class="quick-link-card child" href="https://ncode.syosetu.com/n6316bn/" target="_blank" rel="noopener noreferrer">ㄴ 転生したらスライムだった件</a>
+            <a class="quick-link-card child" href="https://ncode.syosetu.com/n8611bv/" target="_blank" rel="noopener noreferrer">ㄴ ありふれた職業で世界最強</a>
+          </div>
+        </section>
+        <section class="quick-link-group">
+          <a class="quick-link-card" href="https://kakuyomu.jp/" target="_blank" rel="noopener noreferrer">カクヨム (Kakuyomu)</a>
+          <div class="quick-link-children">
+            <a class="quick-link-card child" href="https://kakuyomu.jp/works/1177354054880950791" target="_blank" rel="noopener noreferrer">ㄴ この素晴らしい世界に祝福を！ (코노스바)</a>
+            <a class="quick-link-card child" href="https://kakuyomu.jp/works/1177354054881165840" target="_blank" rel="noopener noreferrer">ㄴ 本好きの下剋上 (명작 추천)</a>
+          </div>
+        </section>
+      </div>
+    </section>
+  </div>
+
+  <div id="characterProfileGuideModal" class="guide-modal" hidden>
+    <div class="guide-backdrop" data-guide-close="true"></div>
+    <section class="guide-panel" role="dialog" aria-modal="true" aria-labelledby="characterProfileGuideTitle">
+      <div class="guide-head">
+        <h3 id="characterProfileGuideTitle">설정집(JSON) 작성 가이드</h3>
+        <button id="characterProfileGuideCloseBtn" type="button" class="ghost">닫기</button>
+      </div>
+      <p class="guide-note">모든 필드(대사 포함)를 전부 채워야 적용됩니다. 일부 누락 시 업로드되지 않습니다.</p>
+      <pre class="guide-code">{
+  "id": "takanashi_hoshino",
+  "displayName": "小鳥遊ホシノ",
+  "identityLine": "ん、アビドス高等学校の小鳥遊ホシノだよ。おじさんと一緒に、今日もゆるーく行こっか。",
+  "defaultTone": {
+    "pitchScale": -0.08,
+    "intonationScale": 0.84
+  },
+  "quizLines": {
+    "perCorrect": "ん、正解。先生、やるじゃん。おじさん感心した。",
+    "perWrong": "んー、惜しい。焦らずにもう一回いこ。おじさん待ってるから。",
+    "finalPerfect": "満点か。えらいえらい、先生ほんとに頑張ったね。おじさん嬉しい。",
+    "finalGood": "おつかれさま。十分いい感じだよ、この調子でいこ。おじさんも付き合うし。",
+    "finalStrict": "今日はちょっと乱れてたね。次は落ち着いて確実に取ろう。おじさんとの約束ね。"
+  },
+  "lines": {
+    "low": [
+      "んー、まだ様子見かな。おじさんにゆっくり見せて。",
+      "急がなくていいよ。丁寧にやってこ。"
+    ],
+    "mid": [
+      "うん、そのペースいいね。今の感じでいこ。おじさん好きだよ、そのテンポ。",
+      "悪くない悪くない。ちゃんとできてるよ。"
+    ],
+    "high": [
+      "先生、今日かなり頼もしいじゃん。おじさん助かるなあ。",
+      "先生といると、なんか落ち着くんだよね。"
+    ],
+    "mumbleLow": [
+      "んー、まだ慎重に見ていきたいかな。おじさんは眠い目こすって見てるよ。",
+      "飛ばしすぎるとすぐバテるよ。ゆっくりでいい。",
+      "今日は基礎を固める日ってことで。"
+    ],
+    "mumbleMid": [
+      "はぁ...こういう静かな時間、嫌いじゃないな。おじさん向きだし。",
+      "先生がいると、ちょっと安心する。",
+      "うん、今くらいのテンポがちょうどいい。"
+    ],
+    "mumbleHigh": [
+      "あ、先生来た。待ってたよ。おじさん寂しかったんだよね。",
+      "先生と話してると、眠気もちょっと引くんだよね。",
+      "今日もゆるく、でも確実に進めてこ。"
+    ],
+    "mumbleHigh75": [
+      "先生の声聞くと、なんだか安心するんだ。おじさん単純だからさ。",
+      "ふふ、ちょっと嬉しいのは内緒ね。",
+      "今日はもう少し近くにいてよ。"
+    ],
+    "mumbleHigh90": [
+      "先生がいないと...思ったより寂しいんだよね。おじさん、そういうの弱くて。",
+      "今日はぴったり一緒にいたい気分。",
+      "先生といる時間、ほんと好きだな。"
+    ],
+    "mumbleNeg10": [
+      "ん、今のはちょっと強かったかも。おじさんにもう少し優しくね。",
+      "大丈夫、ミスはあるって。次で合わせればいいよ。"
+    ],
+    "mumbleNeg30": [
+      "このテンポは少しきついな...おじさんと一回呼吸合わせよ。",
+      "先生、今はゆっくりの方がいい。"
+    ],
+    "mumbleNeg60": [
+      "今は少し休もう。おじさんも気持ち整えたい。",
+      "平気、ここからまた合わせていけばいい。"
+    ]
+  },
+  "tapLines": {
+    "head": {
+      "low": [
+        "ん、頭は急に触るとびっくりするよ。",
+        "もう少しそっと、ね。"
+      ],
+      "mid": [
+        "よしよしは悪くないね。おじさん、こういうの好き。",
+        "先生の手、あったかいな。"
+      ],
+      "high": [
+        "ふふ、もっと撫でていいよ。おじさん甘やかされたいし。",
+        "その触り方、好き。"
+      ]
+    },
+    "face": {
+      "low": [
+        "顔はちょっと近いかも。距離感大事。",
+        "ほっぺは不意打ちだと照れるって。"
+      ],
+      "mid": [
+        "ん、くすぐったい。",
+        "そのくらいなら平気。"
+      ],
+      "high": [
+        "先生に触られると、妙にドキドキするな。",
+        "やさしくなら、ずっと触ってていいよ。"
+      ]
+    },
+    "body": {
+      "low": [
+        "そこは急すぎ。もうちょっと加減して。",
+        "びっくりするから、ゆっくりね。"
+      ],
+      "mid": [
+        "くすぐったい...でも平気。",
+        "そのタッチ、悪くない。"
+      ],
+      "high": [
+        "ん...先生、上手くなったね。",
+        "嫌じゃない。むしろ安心する。"
+      ]
+    },
+    "hand": {
+      "low": [
+        "手を取るなら優しくお願い。",
+        "急に握るのは反則だよ。"
+      ],
+      "mid": [
+        "手、つなぐ？いいよ。おじさんの手、ちゃんと握って。",
+        "うん、この感じ落ち着く。"
+      ],
+      "high": [
+        "このまま離さないで。おじさん、離されると困る。",
+        "先生の手、好きだな。"
+      ]
+    },
+    "default": {
+      "low": [
+        "んー、もう少し丁寧にお願い。",
+        "急に来るとびっくりするってば。"
+      ],
+      "mid": [
+        "お、今の反応は悪くない。",
+        "そのテンポ、ちょうどいいね。"
+      ],
+      "high": [
+        "ふふ、先生ってすぐわかる。",
+        "もっと構ってくれていいよ。"
+      ]
+    }
+  }
+}</pre>
+    </section>
+  </div>
+
+  <script src="app-runtime.js"></script>
+  <script src="app-voice-core.js"></script>
+  <script src="app-voice-ui.js"></script>
+  <script src="app-voice-service.js"></script>
+  <script src="app-live2d-core.js"></script>
+  <script src="app-live2d-ui.js"></script>
+  <script src="app-live2d-stage-ui.js"></script>
+  <script src="app-live2d-service.js"></script>
+  <script src="furigana-core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

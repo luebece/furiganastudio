@@ -1,0 +1,35 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "lumine.moc3",
+		"Textures": [
+			"lumine.8192/texture_00.png"
+		]
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": [
+				"ParamMouthForm",
+				"ParamMouthOpenY",
+				"ParamMouthX",
+				"ParamtongueOut",
+				"ParamMouthFunnel",
+				"ParamMouthShrug",
+				"ParamMouthPuckerWiden",
+				"ParamJawOpen",
+				"ParamCheekPuffR",
+				"ParamCheekPuffL"
+			]
+		},
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": [
+				"ParamEyeLOpen",
+				"ParamEyeROpen"
+			]
+		}
+	]
+}

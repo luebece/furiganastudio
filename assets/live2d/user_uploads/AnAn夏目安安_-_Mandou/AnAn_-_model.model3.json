@@ -1,0 +1,24 @@
+{
+	"Version": 3,
+	"FileReferences": {
+		"Moc": "AnAn_-_model.moc3",
+		"Textures": [
+			"AnAn_-_model.4096/texture_00.png",
+			"AnAn_-_model.4096/texture_01.png",
+			"AnAn_-_model.4096/texture_02.png"
+		],
+		"Physics": "AnAn_-_model.physics3.json"
+	},
+	"Groups": [
+		{
+			"Target": "Parameter",
+			"Name": "EyeBlink",
+			"Ids": []
+		},
+		{
+			"Target": "Parameter",
+			"Name": "LipSync",
+			"Ids": []
+		}
+	]
+}
