@@ -3,83 +3,244 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FuriganaStudio 다운로드</title>
+  <title>FuriganaStudio | Official Download</title>
+  <meta name="description" content="FuriganaStudio 공식 다운로드 페이지. 일본어 후리가나, VOICEVOX/AivisSpeech, Live2D 학습 도구." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #0f1720;
-      --card: #162433;
-      --text: #e8f0f7;
-      --muted: #9db3c6;
-      --accent: #4cc9f0;
-      --accent2: #90be6d;
+      --bg: #0b1117;
+      --panel: #121c28;
+      --panel-2: #162434;
+      --line: #2a3c50;
+      --text: #e9f0f7;
+      --muted: #9cb0c3;
+      --brand: #5de2c4;
+      --brand-ink: #06261f;
+      --accent: #8dc8ff;
+      --warn: #ffd18d;
+      --radius: 16px;
     }
     * { box-sizing: border-box; }
+    html, body { margin: 0; }
     body {
-      margin: 0;
-      font-family: "Pretendard", "Noto Sans KR", sans-serif;
-      background: radial-gradient(1200px 600px at 20% 0%, #1d2d44 0%, var(--bg) 55%);
+      font-family: "Noto Sans KR", sans-serif;
       color: var(--text);
+      background:
+        radial-gradient(850px 420px at 12% -12%, #1c3051 0%, rgba(28, 48, 81, 0) 70%),
+        radial-gradient(780px 400px at 90% 0%, #17303a 0%, rgba(23, 48, 58, 0) 62%),
+        var(--bg);
       min-height: 100vh;
+    }
+    .wrap {
+      width: min(1080px, 100%);
+      margin: 0 auto;
+      padding: 28px 18px 44px;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .brand {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 22px;
+      letter-spacing: .2px;
+    }
+    .badge {
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      background: #0f1924;
+      border-radius: 999px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .hero {
       display: grid;
-      place-items: center;
-      padding: 24px;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 14px;
+      margin-bottom: 14px;
     }
     .card {
-      width: min(760px, 100%);
-      background: linear-gradient(180deg, #1a2b3f 0%, var(--card) 100%);
-      border: 1px solid #27415c;
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, .35);
+      background: linear-gradient(180deg, var(--panel-2) 0%, var(--panel) 100%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, .28);
     }
-    h1 { margin: 0 0 8px; font-size: 30px; }
-    p { margin: 0 0 10px; color: var(--muted); line-height: 1.6; }
-    ol { margin: 12px 0 20px 20px; color: var(--text); }
-    li { margin: 6px 0; }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    h1 {
+      margin: 0 0 10px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(28px, 4.6vw, 44px);
+      line-height: 1.1;
+      letter-spacing: -.5px;
+    }
+    .sub {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .cta {
+      margin-top: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
     .btn {
-      display: inline-block;
       text-decoration: none;
-      border-radius: 12px;
-      padding: 12px 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 14px;
+      border-radius: 11px;
+      font-size: 14px;
       font-weight: 700;
       border: 1px solid transparent;
     }
-    .primary { background: var(--accent); color: #062537; }
-    .secondary { background: #24384d; color: var(--text); border-color: #35516f; }
-    .note {
-      margin-top: 14px;
+    .btn.primary {
+      background: var(--brand);
+      color: var(--brand-ink);
+    }
+    .btn.secondary {
+      border-color: #35516f;
+      background: #1a2a3a;
+      color: var(--text);
+    }
+    .meta {
+      display: grid;
+      gap: 8px;
       font-size: 14px;
-      color: #bed0df;
+      color: #c8d5e2;
+    }
+    .meta strong {
+      color: #f3f8fe;
+      min-width: 78px;
+      display: inline-block;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .section-title {
+      margin: 0 0 8px;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 18px;
+    }
+    .list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+    .notice {
+      margin-top: 14px;
+      border: 1px solid #5a4a2d;
+      background: #221b0f;
+      color: #f2dbb6;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .footer {
+      margin-top: 16px;
+      color: #8aa2b7;
+      font-size: 12px;
+      text-align: center;
     }
     code {
-      background: #203247;
-      border: 1px solid #345171;
+      background: #1a2a3b;
+      border: 1px solid #35516f;
       border-radius: 7px;
       padding: 2px 6px;
-      color: #d9f1ff;
+      color: #cce8ff;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <main class="card">
-    <h1>FuriganaStudio</h1>
-    <p>일본어 후리가나 + VOICEVOX/AivisSpeech + Live2D 학습 도구</p>
-    <ol>
-      <li>먼저 <strong>VOICEVOX</strong> 또는 <strong>AivisSpeech</strong>를 설치하고 실행합니다.</li>
-      <li><strong>FuriganaStudio.exe</strong>를 다운로드합니다.</li>
-      <li>다운로드한 exe를 실행하면 바로 사용할 수 있습니다.</li>
-    </ol>
-    <div class="actions">
-      <a class="btn primary" href="https://github.com/luebece/furiganastudio/releases/latest">최신 exe 다운로드</a>
-      <a class="btn secondary" href="https://voicevox.hiroshiba.jp/">VOICEVOX 받기</a>
-      <a class="btn secondary" href="https://aivis-project.com/">AivisSpeech 받기</a>
-    </div>
-    <p class="note">
-      보안 경고가 뜨면 <code>추가 정보</code> → <code>실행</code>을 눌러 진행하세요.
-      <br />
-      최신 릴리스가 아직 없으면 링크가 비어 보일 수 있습니다. 먼저 <code>FuriganaStudio.exe</code>를 Releases에 업로드하세요.
-    </p>
-  </main>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">FuriganaStudio</div>
+      <div class="badge">Official Distribution</div>
+    </header>
+
+    <section class="hero">
+      <article class="card">
+        <h1>Windows 전용 공식 다운로드</h1>
+        <p class="sub">
+          일본어 문장 후리가나 생성, VOICEVOX/AivisSpeech 음성 재생, Live2D 반응형 학습 UI를
+          하나의 데스크톱 앱으로 제공합니다.
+        </p>
+        <div class="cta">
+          <a class="btn primary" href="https://github.com/luebece/furiganastudio/releases/latest">Download FuriganaStudio.exe</a>
+          <a class="btn secondary" href="https://github.com/luebece/furiganastudio/releases">All Releases</a>
+        </div>
+      </article>
+
+      <aside class="card">
+        <h2 class="section-title">Release Info</h2>
+        <div class="meta">
+          <div><strong>Product</strong> FuriganaStudio</div>
+          <div><strong>Platform</strong> Windows 10/11 (64-bit)</div>
+          <div><strong>Runtime</strong> VOICEVOX or AivisSpeech (separately installed)</div>
+          <div><strong>Update</strong> GitHub Releases</div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2 class="section-title">Quick Start</h2>
+        <ol class="list">
+          <li><a href="https://voicevox.hiroshiba.jp/" target="_blank" rel="noopener noreferrer">VOICEVOX</a> 또는 <a href="https://aivis-project.com/" target="_blank" rel="noopener noreferrer">AivisSpeech</a>를 설치 후 실행</li>
+          <li><code>FuriganaStudio.exe</code> 다운로드</li>
+          <li>실행 후 바로 사용</li>
+        </ol>
+      </article>
+
+      <article class="card">
+        <h2 class="section-title">System Requirements</h2>
+        <ul class="list">
+          <li>Windows 10/11 (64-bit)</li>
+          <li>메모리 8GB 이상 권장</li>
+          <li>여유 저장공간 1GB 이상</li>
+          <li>초기 실행 시 네트워크 필요 가능</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <h2 class="section-title">Support</h2>
+        <ul class="list">
+          <li><a href="https://github.com/luebece/furiganastudio/issues" target="_blank" rel="noopener noreferrer">Issue Tracker</a></li>
+          <li><a href="https://github.com/luebece/furiganastudio" target="_blank" rel="noopener noreferrer">Source Repository</a></li>
+          <li>보안 경고가 뜨면 <code>추가 정보 → 실행</code></li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="notice">
+      본 앱은 로컬 음성 엔진(VOICEVOX/AivisSpeech)을 이용합니다.
+      음성 엔진이 실행되지 않은 상태에서는 TTS 기능이 정상 동작하지 않을 수 있습니다.
+    </section>
+
+    <footer class="footer">
+      © FuriganaStudio. All rights reserved.
+    </footer>
+  </div>
 </body>
 </html>
