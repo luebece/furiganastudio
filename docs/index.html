@@ -3,244 +3,464 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FuriganaStudio | Official Download</title>
-  <meta name="description" content="FuriganaStudio 공식 다운로드 페이지. 일본어 후리가나, VOICEVOX/AivisSpeech, Live2D 학습 도구." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <title>FuriganaStudio | 텍스트에 생명을 불어넣다</title>
+  <meta name="description" content="일본어 후리가나, VOICEVOX 연동, Live2D 렌더링이 통합된 올인원 데스크톱 학습 도구" />
+  
+  <!-- 최고 존엄 폰트 Pretendard 로드 -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
   <style>
     :root {
-      --bg: #0b1117;
-      --panel: #121c28;
-      --panel-2: #162434;
-      --line: #2a3c50;
-      --text: #e9f0f7;
-      --muted: #9cb0c3;
-      --brand: #5de2c4;
-      --brand-ink: #06261f;
-      --accent: #8dc8ff;
-      --warn: #ffd18d;
-      --radius: 16px;
+      --primary: #00C48C;
+      --primary-dark: #009e70;
+      --secondary: #0EA5E9;
+      --bg-color: #F8FAFC;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 20px 40px -5px rgba(0,0,0,0.08);
+      --border-radius: 24px;
     }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
-      font-family: "Noto Sans KR", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(850px 420px at 12% -12%, #1c3051 0%, rgba(28, 48, 81, 0) 70%),
-        radial-gradient(780px 400px at 90% 0%, #17303a 0%, rgba(23, 48, 58, 0) 62%),
-        var(--bg);
-      min-height: 100vh;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      color: var(--text-main);
+      background-color: var(--bg-color);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-    .wrap {
-      width: min(1080px, 100%);
+
+    /* 멋진 배경 그라데이션 효과 */
+    .bg-blobs {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: -1;
+      overflow: hidden;
+      background: #F8FAFC;
+    }
+    .bg-blobs::before, .bg-blobs::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.5;
+    }
+    .bg-blobs::before {
+      top: -10%; left: -10%;
+      width: 50vw; height: 50vw;
+      background: #CCFBF1;
+    }
+    .bg-blobs::after {
+      top: 20%; right: -10%;
+      width: 40vw; height: 40vw;
+      background: #E0F2FE;
+    }
+
+    .container {
+      width: min(1100px, 90%);
       margin: 0 auto;
-      padding: 28px 18px 44px;
+      padding: 0 20px;
     }
-    .topbar {
+
+    /* 네비게이션 바 */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 0;
+      font-weight: 700;
+    }
+    .logo {
+      font-size: 24px;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+      text-decoration: none;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 22px;
+      gap: 8px;
     }
-    .brand {
-      font-family: "Space Grotesk", sans-serif;
-      font-weight: 700;
-      font-size: 22px;
-      letter-spacing: .2px;
+    .logo span { color: var(--primary); }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--primary); }
+
+    /* 메인 히어로 섹션 */
+    .hero {
+      text-align: center;
+      padding: 100px 0 80px;
+      position: relative;
     }
     .badge {
-      padding: 6px 10px;
-      border: 1px solid var(--line);
-      background: #0f1924;
+      display: inline-block;
+      background: #ECFDF5;
+      color: var(--primary-dark);
+      padding: 6px 16px;
       border-radius: 999px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 600;
-    }
-    .hero {
-      display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 14px;
-      margin-bottom: 14px;
-    }
-    .card {
-      background: linear-gradient(180deg, var(--panel-2) 0%, var(--panel) 100%);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 22px;
-      box-shadow: 0 14px 35px rgba(0, 0, 0, .28);
-    }
-    h1 {
-      margin: 0 0 10px;
-      font-family: "Space Grotesk", sans-serif;
-      font-size: clamp(28px, 4.6vw, 44px);
-      line-height: 1.1;
-      letter-spacing: -.5px;
-    }
-    .sub {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-    .cta {
-      margin-top: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .btn {
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 11px 14px;
-      border-radius: 11px;
       font-size: 14px;
       font-weight: 700;
-      border: 1px solid transparent;
+      margin-bottom: 24px;
+      border: 1px solid #A7F3D0;
     }
-    .btn.primary {
-      background: var(--brand);
-      color: var(--brand-ink);
+    .hero h1 {
+      font-size: clamp(40px, 5vw, 64px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.2;
+      margin-bottom: 24px;
     }
-    .btn.secondary {
-      border-color: #35516f;
-      background: #1a2a3a;
-      color: var(--text);
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    .meta {
-      display: grid;
+    .hero p {
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      word-break: keep-all;
+    }
+
+    /* 버튼 스타일 */
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
       gap: 8px;
-      font-size: 14px;
-      color: #c8d5e2;
+      padding: 16px 32px;
+      border-radius: 999px;
+      font-size: 18px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .meta strong {
-      color: #f3f8fe;
-      min-width: 78px;
-      display: inline-block;
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 10px 20px -5px rgba(0, 196, 140, 0.4);
+    }
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 15px 25px -5px rgba(0, 196, 140, 0.5);
+    }
+    .btn-secondary {
+      background: white;
+      color: var(--text-main);
+      border: 2px solid #E2E8F0;
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    /* 특징 섹션 (Grid) */
+    .features {
+      padding: 60px 0 80px;
+    }
+    .section-title {
+      text-align: center;
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 60px;
+      letter-spacing: -1px;
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 32px;
     }
-    .section-title {
-      margin: 0 0 8px;
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 18px;
+    .card {
+      background: var(--card-bg);
+      border: 1px solid white;
+      padding: 40px 32px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      backdrop-filter: blur(10px);
     }
-    .list {
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-      line-height: 1.75;
-      font-size: 14px;
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
     }
-    .notice {
-      margin-top: 14px;
-      border: 1px solid #5a4a2d;
-      background: #221b0f;
-      color: #f2dbb6;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 13px;
-      line-height: 1.6;
+    .card-icon {
+      margin-bottom: 24px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
     }
-    .footer {
+    .card h3 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .card p {
+      color: var(--text-muted);
+      font-size: 16px;
+      word-break: keep-all;
+    }
+
+    /* 실행 방법 섹션 */
+    .how-to {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 60px;
+      margin: 80px 0;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #F1F5F9;
+    }
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      margin-top: 40px;
+    }
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 24px;
+      background: var(--bg-color);
+      border-radius: 16px;
+    }
+    .step-number {
+      background: var(--primary);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .step-text h4 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    .step-text p {
+      color: var(--text-muted);
+    }
+
+    /* 외부 엔진 링크 버튼 스타일 */
+    .engine-links {
+      display: flex;
+      gap: 10px;
       margin-top: 16px;
-      color: #8aa2b7;
-      font-size: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-engine {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      background: white;
+      border: 1px solid #CBD5E1;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-engine:hover {
+      border-color: var(--secondary);
+      color: var(--secondary);
+      background: #F0F9FF;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+    .btn-engine svg {
+      width: 16px;
+      height: 16px;
+      opacity: 0.6;
+    }
+    .btn-engine:hover svg {
+      opacity: 1;
+    }
+    
+    /* 안내사항 박스 */
+    .alert {
+      margin-top: 40px;
+      padding: 20px;
+      background: #FFFBEB;
+      border: 1px solid #FDE68A;
+      border-radius: 16px;
+      color: #92400E;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .alert-icon {
+      flex-shrink: 0;
+      color: #D97706;
+    }
+
+    /* 푸터 */
+    footer {
       text-align: center;
+      padding: 40px 0;
+      color: var(--text-muted);
+      border-top: 1px solid #E2E8F0;
+      margin-top: 60px;
     }
-    code {
-      background: #1a2a3b;
-      border: 1px solid #35516f;
-      border-radius: 7px;
-      padding: 2px 6px;
-      color: #cce8ff;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-    @media (max-width: 920px) {
-      .hero { grid-template-columns: 1fr; }
-      .grid { grid-template-columns: 1fr; }
+
+    @media (max-width: 768px) {
+      .hero { padding: 60px 0 40px; }
+      .btn-group { flex-direction: column; padding: 0 20px; }
+      .btn { width: 100%; justify-content: center; }
+      .how-to { padding: 30px 20px; }
+      .step-item { flex-direction: column; align-items: center; text-align: center; }
+      .engine-links { justify-content: center; }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="topbar">
-      <div class="brand">FuriganaStudio</div>
-      <div class="badge">Official Distribution</div>
-    </header>
+
+  <div class="bg-blobs"></div>
+
+  <div class="container">
+    <nav>
+      <a href="#" class="logo">Furigana<span>Studio</span></a>
+      <div class="nav-links">
+        <a href="https://github.com/luebece/furiganastudio" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </nav>
 
     <section class="hero">
-      <article class="card">
-        <h1>Windows 전용 공식 다운로드</h1>
-        <p class="sub">
-          일본어 문장 후리가나 생성, VOICEVOX/AivisSpeech 음성 재생, Live2D 반응형 학습 UI를
-          하나의 데스크톱 앱으로 제공합니다.
-        </p>
-        <div class="cta">
-          <a class="btn primary" href="https://github.com/luebece/furiganastudio/releases/latest">Download FuriganaStudio.exe</a>
-          <a class="btn secondary" href="https://github.com/luebece/furiganastudio/releases">All Releases</a>
+      <div class="badge">Official Windows Release</div>
+      <h1>읽고, 듣고, 소통하는<br><span class="highlight">생생한 올인원 학습 환경</span></h1>
+      <p>
+        일본어 문장 자동 분석, VOICEVOX/AivisSpeech 음성 낭독, 그리고 반응형 Live2D 아바타까지.
+        복잡한 웹 호스팅 없이 내 PC에서 설치 없이 바로 실행하세요.
+      </p>
+
+      <div class="btn-group">
+        <!-- 버튼 클릭 시 최신 릴리즈로 이동 -->
+        <a href="https://github.com/luebece/furiganastudio/releases/latest" class="btn btn-primary">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Windows용 다운로드
+        </a>
+        <a href="https://github.com/luebece/furiganastudio/releases" class="btn btn-secondary">
+          업데이트 내역 보기
+        </a>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2 class="section-title">이런 기능이 준비되어 있습니다</h2>
+      <div class="grid">
+        <div class="card">
+          <div class="card-icon">
+            <!-- 번역/언어 아이콘 -->
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/>
+            </svg>
+          </div>
+          <h3>자동 후리가나 & 단어장</h3>
+          <p>일본어 문장을 넣으면 자동으로 후리가나(요미가나)를 달아줍니다. 모르는 단어를 클릭해 뜻을 확인하고 나만의 단어장을 만드세요.</p>
         </div>
-      </article>
-
-      <aside class="card">
-        <h2 class="section-title">Release Info</h2>
-        <div class="meta">
-          <div><strong>Product</strong> FuriganaStudio</div>
-          <div><strong>Platform</strong> Windows 10/11 (64-bit)</div>
-          <div><strong>Runtime</strong> VOICEVOX or AivisSpeech (separately installed)</div>
-          <div><strong>Update</strong> GitHub Releases</div>
+        <div class="card">
+          <div class="card-icon">
+            <!-- 마이크/오디오 아이콘 -->
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" x2="12" y1="19" y2="22"/>
+            </svg>
+          </div>
+          <h3>로컬 AI 음성 합성</h3>
+          <p>PC에 설치된 VOICEVOX 또는 AivisSpeech와 연동하여, 네트워크 지연 없이 고품질 캐릭터 음성으로 문장을 읽어줍니다.</p>
         </div>
-      </aside>
+        <div class="card">
+          <div class="card-icon">
+            <!-- 반짝임/캐릭터 생동감 아이콘 -->
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+              <path d="M20 3v4"/><path d="M22 5h-4"/><path d="M4 17v2"/><path d="M5 18H3"/>
+            </svg>
+          </div>
+          <h3>살아 숨쉬는 Live2D</h3>
+          <p>단순한 텍스트 뷰어가 아닙니다. 음성에 맞춘 립싱크, 마우스 트래킹, 클릭 상호작용 및 호감도 시스템이 학습의 재미를 더합니다.</p>
+        </div>
+      </div>
     </section>
 
-    <section class="grid">
-      <article class="card">
-        <h2 class="section-title">Quick Start</h2>
-        <ol class="list">
-          <li><a href="https://voicevox.hiroshiba.jp/" target="_blank" rel="noopener noreferrer">VOICEVOX</a> 또는 <a href="https://aivis-project.com/" target="_blank" rel="noopener noreferrer">AivisSpeech</a>를 설치 후 실행</li>
-          <li><code>FuriganaStudio.exe</code> 다운로드</li>
-          <li>실행 후 바로 사용</li>
-        </ol>
-      </article>
+    <section class="how-to">
+      <h2 class="section-title" style="margin-bottom: 20px;">단 3단계로 바로 시작하기</h2>
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-number">1</div>
+          <div class="step-text">
+            <h4>로컬 음성 엔진 켜기 <span style="color:var(--secondary); font-size:16px;">(필수)</span></h4>
+            <p>PC에 설치된 <strong>VOICEVOX</strong> 혹은 <strong>AivisSpeech</strong>를 먼저 실행해두어야 음성 합성 기능이 정상 작동합니다. 아직 설치하지 않았다면 아래 공식 사이트에서 받아주세요.</p>
+            
+            <!-- 음성 엔진 다운로드 외부 링크 버튼 -->
+            <div class="engine-links">
+              <a href="https://voicevox.hiroshiba.jp/" target="_blank" rel="noopener noreferrer" class="btn-engine">
+                VOICEVOX 공식 사이트
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+              <a href="https://aivis-project.com/" target="_blank" rel="noopener noreferrer" class="btn-engine">
+                AivisSpeech 공식 사이트
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">2</div>
+          <div class="step-text">
+            <h4>프로그램 다운로드</h4>
+            <p>위의 메인 다운로드 버튼을 눌러 최신 버전의 <code>FuriganaStudio.exe</code>를 다운로드 받습니다.</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-number">3</div>
+          <div class="step-text">
+            <h4>설치 없이 즉시 실행</h4>
+            <p>다운로드 받은 파일을 더블클릭하면 끝! 무거운 설치 과정 없이 독립적인 포터블 형태로 바로 실행됩니다.</p>
+          </div>
+        </div>
+      </div>
 
-      <article class="card">
-        <h2 class="section-title">System Requirements</h2>
-        <ul class="list">
-          <li>Windows 10/11 (64-bit)</li>
-          <li>메모리 8GB 이상 권장</li>
-          <li>여유 저장공간 1GB 이상</li>
-          <li>초기 실행 시 네트워크 필요 가능</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h2 class="section-title">Support</h2>
-        <ul class="list">
-          <li><a href="https://github.com/luebece/furiganastudio/issues" target="_blank" rel="noopener noreferrer">Issue Tracker</a></li>
-          <li><a href="https://github.com/luebece/furiganastudio" target="_blank" rel="noopener noreferrer">Source Repository</a></li>
-          <li>보안 경고가 뜨면 <code>추가 정보 → 실행</code></li>
-        </ul>
-      </article>
+      <div class="alert">
+        <div class="alert-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        </div>
+        <div>
+          <strong>Windows 보안 경고가 뜨나요?</strong><br>
+          개인 개발자가 배포하는 exe 파일은 윈도우 디펜더에서 경고를 띄울 수 있습니다. 안심하고 <strong>[추가 정보] → [실행]</strong>을 눌러주세요.
+        </div>
+      </div>
     </section>
 
-    <section class="notice">
-      본 앱은 로컬 음성 엔진(VOICEVOX/AivisSpeech)을 이용합니다.
-      음성 엔진이 실행되지 않은 상태에서는 TTS 기능이 정상 동작하지 않을 수 있습니다.
-    </section>
-
-    <footer class="footer">
-      © FuriganaStudio. All rights reserved.
+    <footer>
+      <p>© 2026 FuriganaStudio. All rights reserved.</p>
+      <p style="margin-top: 10px; font-size: 14px;">
+        Powered by Kuromoji.js, VOICEVOX, Live2D Cubism, and Electron.
+      </p>
     </footer>
   </div>
+
 </body>
 </html>
